@@ -1,0 +1,30 @@
+2
+Data Structures: Binary Trees
+Binary trees are hierarchical data structures composed of nodes, each having at most two children referred to as the left and right child. They're fundamental for efficient data storage, searching, and sorting. Binary Search Trees (BSTs) maintain the property that the left subtree contains values less than the node, while the right subtree contains greater values, enabling O(log n) search operations in balanced trees.
+3
+Data Structures
+Binary Trees
+Programming Algorithm
+2025-05-25
+1
+---
+3
+Introduction to Quantum Computing
+Quantum computing leverages quantum mechanics principles to process information in ways classical computers cannot. Unlike classical bits, quantum bits or qubits can exist in multiple states simultaneously due to superposition. Quantum computers excel at specific problems like factoring large numbers and simulating quantum systems. Key concepts include quantum gates, entanglement, and quantum algorithms such as Shor's and Grover's algorithms.
+3
+Computer Science
+Physics
+Quantum Computing
+2024-12-21
+1
+---
+1
+Organic Chemistry: Functional Groups
+Functional groups are specific arrangements of atoms within organic molecules that determine the molecule's properties and reactivity. Major functional groups include alcohols (R-OH), aldehydes (R-CHO), ketones (R-CO-R'), carboxylic acids (R-COOH), esters (R-COOR'), amines (R-NH2), and ethers (R-O-R'). Each group exhibits characteristic chemical reactions that form the foundation of organic synthesis pathways.
+3
+Biochemistry
+Chemistry
+Organic Chemistry
+2006-06-06
+5
+---
