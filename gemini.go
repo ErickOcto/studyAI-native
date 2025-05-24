@@ -32,7 +32,7 @@ func AiQuiz(app StudyAssistant) {
 
 	fmt.Println("Generating whushhhhh 🚀")
 
-	//   GEMINI, Kak tolong APIKey nya jangan di apa apain :)
+	//   GEMINI DOCS, Kak tolong APIKey nya jangan di apa apain :)
 	ctx := context.Background()
 	client, err := genai.NewClient(ctx, &genai.ClientConfig{
 		APIKey:  "AIzaSyDt4n2quqlK8ZEmi10wvRVrufMzmPjpXqw",
