@@ -8,14 +8,6 @@ type Note struct {
 	Difficulty int
 }
 
-type Exercise struct {
-	ID       int
-	Question string
-	Options  [4]string
-	Answer   int
-	TopicID  int
-}
-
 type Schedule struct {
 	Date        string
 	Description string
@@ -24,7 +16,6 @@ type Schedule struct {
 type StudyAssistant struct {
 	Notes         [100]Note
 	NoteCount     int
-	Exercises     [200]Exercise
 	ExerciseCount int
 	Schedules     [20]Schedule
 	ScheduleCount int

@@ -10,7 +10,6 @@ import (
 func main() {
 	var app StudyAssistant
 	app.NoteCount = 0
-	app.ExerciseCount = 0
 	app.ScheduleCount = 0
 	var choice string
 	today := time.Now().Format("2006-01-02")
@@ -157,7 +156,6 @@ func editNote(app StudyAssistant) StudyAssistant {
 	note := app.Notes[index]
 
 	fmt.Printf("Current title: %s\n", note.Title)
-	fmt.Print("New title (press Enter if no change): ")
 	var newTitle string
 	newTitle = ReadFullLine()
 	if len(newTitle) > 0 {
@@ -174,7 +172,7 @@ func editNote(app StudyAssistant) StudyAssistant {
 	fmt.Printf("Current date: %s\n", note.Date)
 	fmt.Print("New date (YYYY-MM-DD, press Enter if no change): ")
 	var newDate string
-	fmt.Scan(&newDate)
+	fmt.Scanln(&newDate)
 	if len(newDate) > 0 {
 		note.Date = newDate
 	}
@@ -182,9 +180,9 @@ func editNote(app StudyAssistant) StudyAssistant {
 	fmt.Printf("Current difficulty: %d\n", note.Difficulty)
 	fmt.Print("New difficulty level (1-5, press Enter if no change): ")
 	var newDiff int
-	fmt.Scan(&newDiff)
+	fmt.Scanln(&newDiff)
 
-	if newDiff != note.Difficulty {
+	if newDiff != note.Difficulty && newDiff != 0 {
 		note.Difficulty = newDiff
 	}
 	app.Notes[index] = note
