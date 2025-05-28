@@ -1,58 +1,56 @@
 package main
 
-func SelectionSort(notes *[100]Note, count int) {
-	for i := 0; i < count-1; i++ {
+func SelectionSort(study *StudyAssistant) {
+
+	for i := 0; i < study.NoteCount-1; i++ {
 		minIndex := i
-		for j := i + 1; j < count; j++ {
-			if notes[j].Difficulty < notes[minIndex].Difficulty {
+		for j := i + 1; j < study.NoteCount; j++ {
+			if study.Notes[j].Difficulty < study.Notes[minIndex].Difficulty {
 				minIndex = j
 			}
 		}
 		if minIndex != i {
-			temp := notes[i]
-			notes[i] = notes[minIndex]
-			notes[minIndex] = temp
+			temp := study.Notes[i]
+			study.Notes[i] = study.Notes[minIndex]
+			study.Notes[minIndex] = temp
 		}
 	}
 }
 
-func InsertionSort(notes *[100]Note, count int) {
-	for i := 1; i < count; i++ {
-		key := notes[i]
+func InsertionSort(study *StudyAssistant) {
+	for i := 1; i < study.NoteCount; i++ {
+		key := study.Notes[i]
 		j := i - 1
-
-		for j >= 0 && CheckDate(notes[j].Date, key.Date) {
-			notes[j+1] = notes[j]
+		for j >= 0 && CheckDate(study.Notes[j].Date[0], key.Date[0], study.Notes[j].Date[1], key.Date[1], study.Notes[j].Date[2], key.Date[2]) {
+			study.Notes[j+1] = study.Notes[j]
 			j = j - 1
 		}
-
-		notes[j+1] = key
+		study.Notes[j+1] = key
 	}
 }
 
-func CheckDate(date1, date2 string) bool {
-	if len(date1) < 10 || len(date2) < 10 {
-		return false
+func InsertionSortDate(date *StudyAssistant) {
+	for i := 1; i < date.ScheduleCount; i++ {
+		key := date.Schedules[i]
+		j := i - 1
+		for j >= 0 && CheckDate(date.Schedules[j].Date[0], key.Date[0], date.Schedules[j].Date[1], key.Date[1], date.Schedules[j].Date[2], key.Date[2]) {
+			date.Schedules[j+1] = date.Schedules[j]
+			j = j - 1
+		}
+		date.Schedules[j+1] = key
 	}
-	year1 := StringToInt(date1[0:4])
-	month1 := StringToInt(date1[5:7])
-	day1 := StringToInt(date1[8:10])
+}
 
-	year2 := StringToInt(date2[0:4])
-	month2 := StringToInt(date2[5:7])
-	day2 := StringToInt(date2[8:10])
-
-	if year1 > year2 {
+func CheckDate(y1, y2, m1, m2, d1, d2 int) bool {
+	if y1 > y2 {
 		return true
-	} else if year1 < year2 {
+	} else if y1 < y2 {
 		return false
 	}
-
-	if month1 > month2 {
+	if m1 > m2 {
 		return true
-	} else if month1 < month2 {
+	} else if m1 < m2 {
 		return false
 	}
-
-	return day1 > day2
+	return d1 > d2
 }

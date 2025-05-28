@@ -8,154 +8,170 @@ import (
 )
 
 func main() {
-	var app StudyAssistant
-	app.NoteCount = 0
-	app.ScheduleCount = 0
+	var study StudyAssistant
+	study.NoteCount = 0
+	study.ScheduleCount = 0
 	var choice string
-	today := time.Now().Format("2006-01-02")
-
 	choice = " "
-
 	for choice != "0" {
-		fmt.Println("\n===== AI Learnin-g Assistant Application =====")
-		DisplayUpcomingSchedules(app, today)
-
-		fmt.Println("1. Add Note")
-		fmt.Println("2. Display All Notes")
-		fmt.Println("3. Search Notes")
-		fmt.Println("4. Sort Notes by Difficulty")
-		fmt.Println("5. Sort Notes by Date")
-		fmt.Println("6. Edit Note")
-		fmt.Println("7. Delete Note")
-		fmt.Println("8. AI-Powered Quiz")
-		fmt.Println("9. Save Notes to File")
-		fmt.Println("10. Load Notes from File")
-		fmt.Println("11. Add Schedule")
-		fmt.Println("0. Exit")
+		fmt.Println("\n===== AI Learning Assistant Application =====")
+		displayCurrentSchedules(study)
+		fmt.Println("1.  [📝] Add Note")
+		fmt.Println("2.  [📝] Edit Note")
+		fmt.Println("3.  [🚮] Delete Note")
+		fmt.Println("4.  [🗒️] View Note")
+		fmt.Println("5.  [📶] Sort Notes by Difficulty")
+		fmt.Println("6.  [📶] Sort Notes by Date")
+		fmt.Println("7.  [📖] Display All Notes")
+		fmt.Println("8.  [🔍] Search Notes")
+		fmt.Println("9.  [🧠] AI-Powered Quiz")
+		fmt.Println("10. [📅] Add Schedule")
+		fmt.Println("0.  [⛔️] Exit")
 		fmt.Print("Choose menu: ")
 
 		fmt.Scan(&choice)
 
-		if choice == "1" {
-			app = addNote(app)
-		} else if choice == "2" {
-			displayNotes(app)
-		} else if choice == "3" {
-			searchNotes(app)
-		} else if choice == "4" {
-			SelectionSort(&app.Notes, app.NoteCount)
+		switch choice {
+		case "1":
+			addNote(&study)
+		case "2":
+			editNote(&study)
+		case "3":
+			deleteNote(&study)
+		case "4":
+			detailNote(study)
+		case "5":
+			SelectionSort(&study)
+			fmt.Println()
 			fmt.Println("Notes sorted by difficulty")
-		} else if choice == "5" {
-			InsertionSort(&app.Notes, app.NoteCount)
+			fmt.Println()
+			displayNotes(study)
+		case "6":
+			InsertionSort(&study)
+			fmt.Println()
 			fmt.Println("Notes sorted by date")
-		} else if choice == "6" {
-			app = editNote(app)
-		} else if choice == "7" {
-			app = deleteNote(app)
-		} else if choice == "8" {
-			AiQuiz(app)
-		} else if choice == "9" {
-			fmt.Print("Enter filename: ")
-			var filename string
-			fmt.Scanln(&filename)
-			err := SaveNotes(filename, app.Notes, app.NoteCount)
-			if err != nil {
-				fmt.Println("error at function save notes")
-			}
-			fmt.Println("Notes Successfully saved")
-		} else if choice == "10" {
-			fmt.Print("Enter filename: ")
-			var filename string
-			fmt.Scanln(&filename)
-			notes, count, err := LoadNotes(filename)
-			if err != nil {
-				fmt.Println("Failed to get notes from your file ><:", err)
-			} else {
-				app.Notes = notes
-				app.NoteCount = count
-				fmt.Println("Successfully loaded notes")
-			}
-		} else if choice == "11" {
-			AddSchedule(&app)
+			displayNotes(study)
+		case "7":
+			displayNotes(study)
+		case "8":
+			searchNotes(study)
+		case "9":
+			AiQuiz(study)
+		case "10":
+			addSchedule(&study)
 		}
 	}
 }
 
-func addNote(app StudyAssistant) StudyAssistant {
-	var newNote Note
-	newNote.ID = app.NoteCount + 1
+func displayNotes(study StudyAssistant) {
+	if study.NoteCount == 0 {
+		fmt.Println("======================================================")
+		fmt.Println("[🤷🏻] No notes available, please make at least one note")
+		fmt.Println("======================================================")
+	}
 
-	fmt.Print("Input Title: ")
+	fmt.Println()
+	fmt.Println("====== Notes List ======")
+	for i := 0; i < study.NoteCount; i++ {
+		fmt.Printf("%d %s (Difficulty: %d, Date: %d-%d-%d)\n", study.Notes[i].ID, study.Notes[i].Title, study.Notes[i].Difficulty, study.Notes[i].Date[0], study.Notes[i].Date[1], study.Notes[i].Date[2])
+	}
+	fmt.Println("========================")
+}
+
+func addNote(study *StudyAssistant) {
+	var newNote Note
+	newNote.ID = study.NoteCount + 1
+
+	fmt.Print("Title: ")
 	newNote.Title = ReadFullLine()
 
-	fmt.Print("Contents: ")
+	fmt.Print("Content: ")
 	newNote.Content = ReadFullLine()
 
-	fmt.Print("Date: ")
-	fmt.Scanln(&newNote.Date)
+	fmt.Print("Date (YYYY-MM-DD): ")
+	fmt.Scan(&newNote.Date[0], &newNote.Date[1], &newNote.Date[2])
 
 	fmt.Print("Difficulty Level (1-5): ")
 	fmt.Scan(&newNote.Difficulty)
 
-	app.Notes[app.NoteCount] = newNote
-	app.NoteCount++
+	study.Notes[study.NoteCount] = newNote
+	study.NoteCount++
 
-	fmt.Println("Note added successfully")
-	return app
+	fmt.Println()
+	fmt.Println("============================")
+	fmt.Println("[✅] Note added successfully")
+	fmt.Println("============================")
 }
 
-func searchNotes(app StudyAssistant) {
+func searchNotes(study StudyAssistant) {
+	if study.NoteCount == 0 {
+		fmt.Println("======================================================")
+		fmt.Println("[🤷🏻] No notes available, please make at least one note")
+		fmt.Println("======================================================")
+	}
+
 	var searchType int
-	fmt.Println("\n1. Sequential Search")
+	fmt.Println()
+	fmt.Println("1. Sequential Search")
 	fmt.Println("2. Binary Search in ID)")
-	fmt.Print("please choose method: ")
+	fmt.Print("Please choose method: ")
 	fmt.Scan(&searchType)
 	if searchType == 1 {
 		var keyword string
 		fmt.Print("Enter keyword: ")
 		keyword = ReadFullLine()
-		SequentialSearch(app.Notes, app.NoteCount, keyword)
+		SequentialSearch(study.Notes, study.NoteCount, keyword)
 
 	} else if searchType == 2 {
 		var id int
 		fmt.Print("Enter ID: ")
 		fmt.Scan(&id)
-		idx := BinarySearch(app.Notes, app.NoteCount, id)
+		idx := BinarySearch(study.Notes, study.NoteCount, id)
 		if idx != -1 {
-			fmt.Printf("Note found:\n%s\n", app.Notes[idx].Title)
+			fmt.Printf("Note found:\n%s\n", study.Notes[idx].Title)
 		} else {
-			fmt.Println("Not found")
+			fmt.Println("===================")
+			fmt.Println("[🥀] Ups, Not Found")
+			fmt.Println("===================")
 		}
+	} else {
+		fmt.Println("==============")
+		fmt.Println("[🤷🏻] No method")
+		fmt.Println("==============")
 	}
 }
 
-func editNote(app StudyAssistant) StudyAssistant {
-	if app.NoteCount == 0 {
-		fmt.Println("Not found")
-		return app
+func editNote(study *StudyAssistant) {
+	if study.NoteCount == 0 {
+		fmt.Println("======================================================")
+		fmt.Println("[🤷🏻] No notes available, please make at least one note")
+		fmt.Println("======================================================")
 	}
 
-	displayNotes(app)
+	displayNotes(*study)
 
 	fmt.Print("Enter ID: ")
+
 	var id int
 	fmt.Scan(&id)
 
 	index := -1
-	for i := 0; i < app.NoteCount; i++ {
-		if app.Notes[i].ID == id {
+	for i := 0; i < study.NoteCount; i++ {
+		if study.Notes[i].ID == id {
 			index = i
 		}
 	}
 
 	if index == -1 {
-		fmt.Println("Not found")
-		return app
+		fmt.Println("===================")
+		fmt.Println("[🥀] Ups, Not Found")
+		fmt.Println("===================")
 	}
 
-	note := app.Notes[index]
+	note := study.Notes[index]
 
 	fmt.Printf("Current title: %s\n", note.Title)
+	fmt.Print("New title (press Enter if no change): ")
 	var newTitle string
 	newTitle = ReadFullLine()
 	if len(newTitle) > 0 {
@@ -169,13 +185,13 @@ func editNote(app StudyAssistant) StudyAssistant {
 		note.Content = newContent
 	}
 
-	fmt.Printf("Current date: %s\n", note.Date)
-	fmt.Print("New date (YYYY-MM-DD, press Enter if no change): ")
-	var newDate string
-	fmt.Scanln(&newDate)
-	if len(newDate) > 0 {
-		note.Date = newDate
-	}
+	fmt.Printf("Current date: %d-%d-%d\n", note.Date[0], note.Date[1], note.Date[2])
+	fmt.Print("New date (YYYY-MM-DD): ")
+	var newDay, newMonth, newYear int
+	fmt.Scan(&newYear, &newMonth, &newDay)
+	note.Date[0] = newYear
+	note.Date[1] = newMonth
+	note.Date[2] = newDay
 
 	fmt.Printf("Current difficulty: %d\n", note.Difficulty)
 	fmt.Print("New difficulty level (1-5, press Enter if no change): ")
@@ -185,91 +201,123 @@ func editNote(app StudyAssistant) StudyAssistant {
 	if newDiff != note.Difficulty && newDiff != 0 {
 		note.Difficulty = newDiff
 	}
-	app.Notes[index] = note
-	fmt.Println("Note updated")
-
-	return app
+	study.Notes[index] = note
+	fmt.Println("==============================")
+	fmt.Println("[✅] Note updated successfully")
+	fmt.Println("==============================")
 }
 
-func displayNotes(app StudyAssistant) {
-	if app.NoteCount == 0 {
-		fmt.Println("No data")
-		return
+func detailNote(study StudyAssistant) {
+	if study.NoteCount == 0 {
+		fmt.Println("========================================================")
+		fmt.Println("[📝🤷🏻] No notes available, please make at least one note")
+		fmt.Println("========================================================")
 	}
+	displayNotes(study)
 
-	fmt.Println("\n===== Notes List =====")
-	for i := 0; i < app.NoteCount; i++ {
-		fmt.Printf("%d %s (Difficulty: %d, Date: %s)\n", app.Notes[i].ID, app.Notes[i].Title, app.Notes[i].Difficulty, app.Notes[i].Date)
-	}
-}
-
-func deleteNote(app StudyAssistant) StudyAssistant {
-	if app.NoteCount == 0 {
-		fmt.Println("No data")
-		return app
-	}
-	displayNotes(app)
 	fmt.Print("Enter ID: ")
 	var id int
 	fmt.Scan(&id)
 
 	index := -1
-	for i := 0; i < app.NoteCount; i++ {
-		if app.Notes[i].ID == id {
+	for i := 0; i < study.NoteCount; i++ {
+		if study.Notes[i].ID == id {
 			index = i
 		}
 	}
 
 	if index == -1 {
-		fmt.Println("not found")
-		return app
+		fmt.Println("===================")
+		fmt.Println("[🥀] Ups, Not Found")
+		fmt.Println("===================")
+	}
+
+	note := study.Notes[index]
+	fmt.Printf("Topic: %s\n Note: %s\n", note.Title, note.Content)
+}
+
+func deleteNote(study *StudyAssistant) {
+	if study.NoteCount == 0 {
+		fmt.Println("========================================================")
+		fmt.Println("[📝🤷🏻] No notes available, please make at least one note")
+		fmt.Println("========================================================")
+	}
+
+	displayNotes(*study)
+
+	fmt.Print("Enter ID: ")
+	var id int
+	fmt.Scan(&id)
+
+	index := -1
+	for i := 0; i < study.NoteCount; i++ {
+		if study.Notes[i].ID == id {
+			index = i
+		}
+	}
+	if index == -1 {
+		fmt.Println("=====================")
+		fmt.Println("[🥀] Ups, Not Found")
+		fmt.Println("=====================")
 	}
 
 	fmt.Printf("Are you sure? (y/n): ")
-	var noteID string
-	fmt.Scan(&noteID)
-	if noteID != "y" && noteID != "Y" {
-		fmt.Println("Delete was cancelled")
-		return app
+	var choice string
+	fmt.Scan(&choice)
+	if choice != "y" && choice != "Y" {
+		fmt.Println("=====================")
+		fmt.Println("[❌] Delete cancelled")
+		fmt.Println("=====================")
+	} else {
+		for i := index; i < study.NoteCount-1; i++ {
+			study.Notes[i] = study.Notes[i+1]
+		}
+		study.NoteCount--
+		fmt.Println("==============================")
+		fmt.Println("[✅] Note deleted successfully")
+		fmt.Println("==============================")
 	}
 
-	for i := index; i < app.NoteCount-1; i++ {
-		app.Notes[i] = app.Notes[i+1]
-	}
-	app.NoteCount--
-
-	fmt.Println("Note deleted")
-	return app
 }
 
-func AddSchedule(app *StudyAssistant) {
+func addSchedule(study *StudyAssistant) {
 	var newSchedule Schedule
 	fmt.Print("Enter date (YYYY-MM-DD): ")
-	fmt.Scanf("%s", &newSchedule.Date)
+	var y, m, d int
+	fmt.Scan(&y, &m, &d)
+	newSchedule.Date[0] = y
+	newSchedule.Date[1] = m
+	newSchedule.Date[2] = d
 	fmt.Print("Enter description: ")
-	fmt.Scanln(newSchedule.Description)
+	newSchedule.Description = ReadFullLine()
+	study.Schedules[study.ScheduleCount] = newSchedule
+	study.ScheduleCount++
 
-	app.Schedules[app.ScheduleCount] = newSchedule
-	app.ScheduleCount++
-
-	fmt.Println("Schedule was added")
+	fmt.Println("================================")
+	fmt.Println("[✅] Schedule added successfully")
+	fmt.Println("================================")
 }
 
-func DisplayUpcomingSchedules(app StudyAssistant, today string) {
-	hasSchedule := false
-	i := 0
-
-	fmt.Println("\nSchedule:")
-	for i < app.ScheduleCount {
-		if app.Schedules[i].Date > today {
-			fmt.Printf("%s - %s\n", app.Schedules[i].Date, app.Schedules[i].Description)
-			hasSchedule = true
+func displayCurrentSchedules(study StudyAssistant) {
+	fmt.Println()
+	currentYear := time.Now().Year()
+	currentMonth := int(time.Now().Month())
+	currentDay := time.Now().Day()
+	fmt.Println("Schedule in this month:")
+	InsertionSortDate(&study)
+	for i := 0; i < study.ScheduleCount; i++ {
+		if study.Schedules[i].Date[0] == currentYear && study.Schedules[i].Date[1] == currentMonth && study.Schedules[i].Date[2] == currentDay {
+			fmt.Printf("Today - %s\n", study.Schedules[i].Description)
+		} else if study.Schedules[i].Date[0] >= currentYear && study.Schedules[i].Date[1] >= currentMonth && study.Schedules[i].Date[2] >= currentDay {
+			fmt.Printf("%d-%d-%d - %s\n", study.Schedules[i].Date[0], study.Schedules[i].Date[1], study.Schedules[i].Date[2], study.Schedules[i].Description)
 		}
 		i++
 	}
 
-	if !hasSchedule {
-		fmt.Println("No schedule, ")
+	if study.ScheduleCount == 0 {
+		fmt.Println("===============================================================")
+		fmt.Println("[📅🤷🏻] No schedule available, please make at least one schedule")
+		fmt.Println("===============================================================")
 	}
 	fmt.Println()
 }
@@ -278,15 +326,4 @@ func ReadFullLine() string {
 	scanner := bufio.NewScanner(os.Stdin)
 	scanner.Scan()
 	return scanner.Text()
-}
-
-func StringToInt(s string) int {
-	result := 0
-	for i := 0; i < len(s); i++ {
-		digit := int(s[i] - '0')
-		if digit >= 0 && digit <= 9 {
-			result = result*10 + digit
-		}
-	}
-	return result
 }

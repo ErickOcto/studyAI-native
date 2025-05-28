@@ -3,17 +3,13 @@ package main
 import "fmt"
 
 func SequentialSearch(notes [100]Note, count int, keyword string) {
-	counter := 0
 	for i := 0; i < count; i++ {
 		if keyword == notes[i].Title {
-			fmt.Printf("%s %s\n", notes[i].Title, notes[i].Date)
-			counter++
+			fmt.Printf("%s - %d-%d-%d\n", notes[i].Title, notes[i].Date[0], notes[i].Date[1], notes[i].Date[2])
 		}
 	}
-	if counter == 0 {
-		fmt.Print("Note not found")
-	}
 }
+
 func BinarySearch(notes [100]Note, count int, id int) int {
 	left := 0
 	right := count - 1
