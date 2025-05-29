@@ -8,21 +8,28 @@ import (
 )
 
 func AiQuiz(app StudyAssistant) {
-	displayNotes(app)
-	fmt.Println("Choose a topic based on ID:")
 	var topicId int
+	var noteContent, finalGenerated string
+	var i, index int
+	var num1, num2, num3, num4, num5 string
+
+	displayNotes(app)
+
+	fmt.Println("Choose a topic based on ID:")
 	fmt.Scan(&topicId)
 
-	index := -1
-	for i := 0; i < app.NoteCount; i++ {
+	index = -1
+
+	for i = 0; i < app.NoteCount; i++ {
 		if app.Notes[i].ID == topicId {
 			index = i
 		}
 	}
+
 	if index == -1 {
 		NotifyNotFound()
 	} else {
-		noteContent := app.Notes[index].Content
+		noteContent = app.Notes[index].Content
 		fmt.Println("Generating whoosh... 🚀")
 
 		ctx := context.Background()
@@ -42,9 +49,9 @@ func AiQuiz(app StudyAssistant) {
 		if err != nil {
 			log.Fatal(err)
 		}
-		finalGenerated := result.Text()
+
+		finalGenerated = result.Text()
 		fmt.Println(finalGenerated)
-		var num1, num2, num3, num4, num5 string
 		fmt.Println("Answer for number 1")
 		num1 = ReadFullLine()
 		fmt.Println("Answer for number 2")
@@ -55,7 +62,9 @@ func AiQuiz(app StudyAssistant) {
 		num4 = ReadFullLine()
 		fmt.Println("Answer for number 5")
 		num5 = ReadFullLine()
+
 		fmt.Printf("\nAnswers submitted!, And your final score is 🥺...\n")
+
 		result, err = client.Models.GenerateContent(
 			ctx,
 			"gemini-2.0-flash",

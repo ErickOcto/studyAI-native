@@ -6,10 +6,12 @@ import (
 
 func main() {
 	var study StudyAssistant
+	var choice string
+
 	study.NoteCount = 0
 	study.ScheduleCount = 0
-	var choice string
 	choice = " "
+
 	for choice != "0" {
 		fmt.Println("\n===== AI Learning Assistant Application =====")
 		DisplayCurrentSchedules(study)
@@ -24,35 +26,35 @@ func main() {
 		fmt.Println("8.  [🧠] AI-Powered Quiz")
 		fmt.Println("9. [📅] Add Schedule")
 		fmt.Println("0.  [⛔️] Exit")
+
 		fmt.Print("Choose menu: ")
 		fmt.Scan(&choice)
+
 		switch choice {
 		case "1":
 			AddNote(&study)
 		case "2":
-			if study.NoteCount == 0 {
-				Notify()
-			} else {
+			if study.NoteCount > 0 {
 				EditNote(&study)
 			}
 		case "3":
-			if study.NoteCount == 0 {
-				Notify()
-			} else {
+			if study.NoteCount > 0 {
 				DeleteNote(&study)
 			}
 		case "4":
-			if study.NoteCount == 0 {
-				Notify()
-			} else {
+			if study.NoteCount > 0 {
 				DetailNote(study)
 			}
 		case "5":
-			SelectionSort(&study)
-			fmt.Printf("\nNotes sorted by difficulty\n\n")
+			if study.NoteCount > 1 {
+				SelectionSort(&study)
+				fmt.Printf("\nNotes sorted by difficulty\n\n")
+			}
 		case "6":
-			InsertionSort(&study)
-			fmt.Printf("\nNotes sorted by date\n\n")
+			if study.NoteCount > 1 {
+				InsertionSort(&study)
+				fmt.Printf("\nNotes sorted by date\n\n")
+			}
 		case "7":
 			searchNotes(study)
 		case "8":
@@ -64,46 +66,40 @@ func main() {
 }
 
 func displayNotes(study StudyAssistant) {
-	if study.NoteCount == 0 {
-		Notify()
-	} else {
-		fmt.Println()
-		fmt.Printf("\n====== Notes List ======\n\n")
-		for i := 0; i < study.NoteCount; i++ {
-			fmt.Printf("%d %s (Difficulty: %d, Date: %d-%d-%d)\n", study.Notes[i].ID, study.Notes[i].Title, study.Notes[i].Difficulty, study.Notes[i].Date[0], study.Notes[i].Date[1], study.Notes[i].Date[2])
-		}
-		fmt.Printf("\n========================\n\n")
+	var i int
+	fmt.Printf("\n====== Notes List ======\n\n")
+	for i = 0; i < study.NoteCount; i++ {
+		fmt.Printf("%d %s (Difficulty: %d, Date: %d-%d-%d)\n", study.Notes[i].ID, study.Notes[i].Title, study.Notes[i].Difficulty, study.Notes[i].Date[0], study.Notes[i].Date[1], study.Notes[i].Date[2])
 	}
+	fmt.Printf("\n========================\n\n")
 }
 
 func searchNotes(study StudyAssistant) {
-	if study.NoteCount == 0 {
-		Notify()
-	} else {
-		var searchType int
-		fmt.Println()
-		fmt.Println("1. Sequential Search")
-		fmt.Println("2. Binary Search in ID)")
-		fmt.Print("Please choose method: ")
-		fmt.Scan(&searchType)
-		if searchType == 1 {
-			var keyword string
-			fmt.Print("Enter keyword: ")
-			keyword = ReadFullLine()
-			SequentialSearch(study.Notes, study.NoteCount, keyword)
+	var searchType int
+	fmt.Println()
+	fmt.Println("1. Sequential Search")
+	fmt.Println("2. Binary Search in ID)")
 
-		} else if searchType == 2 {
-			var id int
-			fmt.Print("Enter ID: ")
-			fmt.Scan(&id)
-			idx := BinarySearch(study.Notes, study.NoteCount, id)
-			if idx != -1 {
-				fmt.Printf("Note found:\n%s\n", study.Notes[idx].Title)
-			} else {
-				NotifyNotFound()
-			}
+	fmt.Print("Please choose method: ")
+	fmt.Scan(&searchType)
+
+	if searchType == 1 {
+		var keyword string
+		fmt.Print("Enter keyword: ")
+		keyword = ReadFullLine()
+		SequentialSearch(study.Notes, study.NoteCount, keyword)
+
+	} else if searchType == 2 {
+		var id, idx int
+		fmt.Print("Enter ID: ")
+		fmt.Scan(&id)
+		idx = BinarySearch(study.Notes, study.NoteCount, id)
+		if idx != -1 {
+			fmt.Printf("Note found:\n%s\n", study.Notes[idx].Title)
 		} else {
-			fmt.Println("==============\n[🤷🏻] Wrong method\n==============")
+			NotifyNotFound()
 		}
+	} else {
+		fmt.Println("==============\n[🤷🏻] Wrong method\n==============")
 	}
 }

@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="026f9d5d-eaba-4e1b-af73-c113aab254e0" name="Changes" comment="final code">
+    <list default="true" id="026f9d5d-eaba-4e1b-af73-c113aab254e0" name="Changes" comment="the real real final code">
       <change afterPath="$PROJECT_DIR$/go.mod" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/go.sum" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
@@ -144,7 +144,8 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="revision" />
     <MESSAGE value="final code" />
-    <option name="LAST_COMMIT_MESSAGE" value="final code" />
+    <MESSAGE value="the real real final code" />
+    <option name="LAST_COMMIT_MESSAGE" value="the real real final code" />
   </component>
   <component name="VgoProject">
     <settings-migrated>true</settings-migrated>
