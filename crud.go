@@ -107,7 +107,8 @@ func DeleteNote(study *StudyAssistant) {
 
 	displayNotes(*study)
 
-	fmt.Scanf("Enter ID: %d", &id)
+	fmt.Print("Enter ID: ")
+	fmt.Scan(&id)
 
 	index = -1
 	for i = 0; i < study.NoteCount; i++ {
@@ -119,7 +120,8 @@ func DeleteNote(study *StudyAssistant) {
 		NotifyNotFound()
 	} else {
 		var choice string
-		fmt.Scanf("Are you sure? (y/n): %s", &choice)
+		fmt.Print("Are you sure? (y/n): ")
+		fmt.Scan(&choice)
 
 		if choice != "y" && choice != "Y" {
 			fmt.Printf("\n=====================\n[❌] Delete cancelled\n=====================\n\n")

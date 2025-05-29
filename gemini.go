@@ -43,7 +43,7 @@ func AiQuiz(app StudyAssistant) {
 		result, err := client.Models.GenerateContent(
 			ctx,
 			"gemini-2.0-flash",
-			genai.Text("Make me 5 question based on this material content, 3 multiple choices and 2 short essays: "+noteContent),
+			genai.Text("Make me 5 question based on this material content, 3 multiple choices and 2 short essays: ||and do not give the answers, only questions|| "+noteContent),
 			nil,
 		)
 		if err != nil {

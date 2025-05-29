@@ -28,3 +28,21 @@ func BinarySearch(notes [100]Note, count int, id int) int {
 	}
 	return -1
 }
+
+func SelectionSortBinary(study *StudyAssistant) {
+	var i, j, minIndex int
+	var temp Note
+	for i = 0; i < study.NoteCount-1; i++ {
+		minIndex = i
+		for j = i + 1; j < study.NoteCount; j++ {
+			if study.Notes[j].ID < study.Notes[minIndex].ID {
+				minIndex = j
+			}
+		}
+		if minIndex != i {
+			temp = study.Notes[i]
+			study.Notes[i] = study.Notes[minIndex]
+			study.Notes[minIndex] = temp
+		}
+	}
+}

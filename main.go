@@ -24,7 +24,7 @@ func main() {
 		fmt.Println("6.  [📶] Sort Notes by Date")
 		fmt.Println("7.  [🔍] Search Notes")
 		fmt.Println("8.  [🧠] AI-Powered Quiz")
-		fmt.Println("9. [📅] Add Schedule")
+		fmt.Println("9.  [📅] Add Schedule")
 		fmt.Println("0.  [⛔️] Exit")
 
 		fmt.Print("Choose menu: ")
@@ -93,6 +93,7 @@ func searchNotes(study StudyAssistant) {
 		var id, idx int
 		fmt.Print("Enter ID: ")
 		fmt.Scan(&id)
+		SelectionSortBinary(&study)
 		idx = BinarySearch(study.Notes, study.NoteCount, id)
 		if idx != -1 {
 			fmt.Printf("Note found:\n%s\n", study.Notes[idx].Title)
