@@ -1,7 +1,6 @@
 package main
 
 func SelectionSort(study *StudyAssistant) {
-
 	for i := 0; i < study.NoteCount-1; i++ {
 		minIndex := i
 		for j := i + 1; j < study.NoteCount; j++ {
